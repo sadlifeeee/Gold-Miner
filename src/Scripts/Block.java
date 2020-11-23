@@ -1,6 +1,6 @@
 package Scripts;
 
-public abstract class Block {
+public class Block {
     /*
       P - Pit
       - - Normal Block

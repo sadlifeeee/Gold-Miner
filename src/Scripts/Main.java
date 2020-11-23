@@ -14,7 +14,7 @@ public class Main {
 
         try {
             dimension = kb.nextInt();
-            while (dimension < 8 && dimension > 64) {
+            while (dimension < 8 || dimension > 64) {
                 System.out.println("Invalid Input");
                 System.out.print("Size of Rectangular Grid: ");
 
@@ -27,7 +27,7 @@ public class Main {
                     rowInputs[i] = kb.nextLine();
 
                 //  Parse and acquire instantiated Mining Grid
-                //miningGrid = parser.convertToGrid(rowInputs);
+                miningGrid = parser.convertToGrid(rowInputs, dimension);
             }
 
 

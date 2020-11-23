@@ -30,19 +30,6 @@ public class Miner {
             direction = "down";
     }
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
   /*
     Direction of the Front
 
@@ -51,7 +38,6 @@ public class Miner {
     "left" = left
     "right" = right
   */
-
     private String direction;
     private int X;
     private int Y;
