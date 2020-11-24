@@ -2,6 +2,7 @@ import Scripts.*;
 
 import java.util.*;
 
+//  TODO Beacon's functionality - I think BFS
 
 public class Main {
     public static void main(String[] args) {
@@ -34,8 +35,8 @@ public class Main {
             miningGrid = parser.convertToGrid(rowInputs, dimension);
 
             do {
-                System.out.println("Perform Intelligent Search ? [Y/N] : ");
-                String temp = kb.nextLine();
+                System.out.print("Perform Intelligent Search ? [Y/N] : ");
+                String temp = kb.next();
                 if (temp.equalsIgnoreCase("Y") || temp.equalsIgnoreCase("Yes"))
                     isIntelligent = 1;
                 else if (temp.equalsIgnoreCase("N") || temp.equalsIgnoreCase("No"))
@@ -43,8 +44,8 @@ public class Main {
             } while (isIntelligent == -1);
 
             do {
-                System.out.println("Perform in simultaneous succession ? [Y/N] : ");
-                String temp = kb.nextLine();
+                System.out.print("Perform in simultaneous succession ? [Y/N] : ");
+                String temp = kb.next();
                 if (temp.equalsIgnoreCase("Y") || temp.equalsIgnoreCase("Yes"))
                     isSimultaneousPreview = 1;
                 else if (temp.equalsIgnoreCase("N") || temp.equalsIgnoreCase("No"))
@@ -68,9 +69,13 @@ public class Main {
     }
 
     private static void performIntelligentSearch(Miner miner, int isSimultaneousPreview, Block[][] miningGrid, int dimension) {
-        while (canMinerStillPlay(miner, miningGrid)) {
-            printCurrentGameState(miner, miningGrid, dimension);
-        }
+        printCurrentGameState(miner, miningGrid, dimension);
+        miner.moveForwardOneBlock();
+        printCurrentGameState(miner, miningGrid, dimension);
+//        while (canMinerStillPlay(miner, miningGrid)) {
+//
+//            printCurrentGameState(miner, miningGrid, dimension);
+//        }
     }
 
     private static void printCurrentGameState(Miner miner, Block[][] miningGrid, int dimension) {

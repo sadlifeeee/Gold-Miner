@@ -31,6 +31,15 @@ public class Miner {
             direction = "down";
     }
 
+    public void moveForwardOneBlock() {
+        switch (direction) {
+            case "right" -> X++;
+            case "left" -> X--;
+            case "up" -> Y++;
+            case "down" -> Y--;
+        }
+    }
+
     public String getDirection() {
         return direction;
     }
