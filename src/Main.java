@@ -1,4 +1,4 @@
-package Scripts;
+import Scripts.*;
 
 import java.util.*;
 
@@ -16,7 +16,7 @@ public class Main {
                 System.out.print("Size of Rectangular Grid: ");
 
                 dimension = kb.nextInt();
-            } while (dimension <=    0);
+            } while (dimension <= 0);
             //} while (dimension < 8 || dimension > 64);
             //  TODO : Remember to uncomment the restriction above
 
@@ -61,6 +61,9 @@ public class Main {
 
     private static void performIntelligentSearch(Miner miner, Block[][] miningGrid, int dimension) {
         printCurrentGameState(miner, miningGrid, dimension);
+
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     private static void printCurrentGameState(Miner miner, Block[][] miningGrid, int dimension) {
@@ -90,5 +93,10 @@ public class Main {
         System.out.println("Facing Direction \t: " + miner.getDirection());
         System.out.println("Total Scans \t: " + miner.getScans());
         System.out.println("Total Moves \t: " + miner.getMoves());
+    }
+
+    private static boolean canMinerStillPlay(Miner miner, Block[][] miningGrid) {
+        return !((miningGrid[miner.getX() - 1][miner.getY() - 1] instanceof Pit) ||
+                (miningGrid[miner.getX() - 1][miner.getY() - 1] instanceof Gold));
     }
 }
