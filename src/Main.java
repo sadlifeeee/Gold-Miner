@@ -74,13 +74,33 @@ public class Main {
         ArrayList<Block> visitedNodes = new ArrayList<Block>();
         Stack nodePath = new Stack();
         Block scannedBlockInFront;
-        boolean hasDiscoveredABeacon = false;
+        //boolean hasDiscoveredABeacon = false;
 
-        scannedBlockInFront = scanFront(miner, miningGrid);
-        printCurrentGameState(miner, miningGrid, dimension, scannedBlockInFront);
-//        while (canMinerStillPlay(miner, miningGrid)) {
-//
-//        }
+        while (canMinerStillPlay(miner, miningGrid)) {
+            scannedBlockInFront = scanFront(miner, miningGrid);
+
+            // TODO be careful the miner scans their nodePath OR just prevent them from doing so
+            if (scannedBlockInFront == null || visitedNodes.contains(scannedBlockInFront)) {
+                miner.rotate();
+            } else {
+                //  Basic function for winning condition
+                if (scannedBlockInFront instanceof Gold) {
+                    miner.moveForwardOneBlock();
+                }
+
+                miner.moveForwardOneBlock();
+                //  TODO debug AIOOBE issue
+                visitedNodes.add(miningGrid[miner.getY()][miner.getX()]);
+                nodePath.push(miningGrid[miner.getY()][miner.getX()]);
+            }
+
+            printCurrentGameState(miner, miningGrid, dimension, scannedBlockInFront);
+        }
+
+        if (miningGrid[miner.getY()][miner.getX()] instanceof Gold)
+            System.out.println("Win!");
+        else
+            System.out.println("Miner is dead! Game Over!");
     }
 
     private static void printCurrentGameState(Miner miner, Block[][] miningGrid, int dimension, Block scannedBlockInFront) {
@@ -140,7 +160,7 @@ public class Main {
     }
 
     private static boolean canMinerStillPlay(Miner miner, Block[][] miningGrid) {
-        return !((miningGrid[miner.getX() - 1][miner.getY() - 1] instanceof Pit) ||
-                (miningGrid[miner.getX() - 1][miner.getY() - 1] instanceof Gold));
+        return !((miningGrid[miner.getY()][miner.getX()] instanceof Pit) ||
+                (miningGrid[miner.getY()][miner.getX()] instanceof Gold));
     }
 }
