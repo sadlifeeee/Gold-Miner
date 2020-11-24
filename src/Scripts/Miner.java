@@ -11,8 +11,8 @@ public class Miner {
 
     // Initialized at Upper-left corner
     public Miner() {
-        this.X = 1;
-        this.Y = 1;
+        this.X = 0;
+        this.Y = 0;
         this.scans = 0;
         this.moves = 0;
 

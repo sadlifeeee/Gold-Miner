@@ -1,4 +1,5 @@
 import Scripts.*;
+import com.sun.source.tree.BreakTree;
 
 import java.util.*;
 
@@ -68,44 +69,74 @@ public class Main {
         //  TODO : Perform this in a seperate branch
     }
 
+    // Current rationale: DFS + Backtracking BUT break when see beacon - then turn to A*
     private static void performIntelligentSearch(Miner miner, int isSimultaneousPreview, Block[][] miningGrid, int dimension) {
-        printCurrentGameState(miner, miningGrid, dimension);
-        miner.moveForwardOneBlock();
-        printCurrentGameState(miner, miningGrid, dimension);
+        ArrayList<Block> visitedNodes = new ArrayList<Block>();
+        Stack nodePath = new Stack();
+        Block scannedBlockInFront;
+        boolean hasDiscoveredABeacon = false;
+
+        scannedBlockInFront = scanFront(miner, miningGrid);
+        printCurrentGameState(miner, miningGrid, dimension, scannedBlockInFront);
 //        while (canMinerStillPlay(miner, miningGrid)) {
 //
-//            printCurrentGameState(miner, miningGrid, dimension);
 //        }
     }
 
-    private static void printCurrentGameState(Miner miner, Block[][] miningGrid, int dimension) {
-        System.out.println("Mining Grid : \n");
+    private static void printCurrentGameState(Miner miner, Block[][] miningGrid, int dimension, Block scannedBlockInFront) {
+        System.out.println("\n\nMining Grid : \n");
 
         for (int y = 0; y < dimension; y++)
             for (int x = 0; x < dimension; x++) {
                 //  The icon of the Miner has higher precedence than the tiles of the mining grid
-                if (x + 1 == miner.getX() && y + 1 == miner.getY()) {
+                if (x == miner.getX() && y == miner.getY())
                     System.out.print("M");
-                } else {
-                    if (miningGrid[y][x] instanceof Pit)
-                        System.out.print("P");
-                    else if (miningGrid[y][x] instanceof Beacon)
-                        System.out.print("B");
-                    else if (miningGrid[y][x] instanceof Gold)
-                        System.out.print("G");
-                    else
-                        System.out.print("-");
-                }
+                else
+                    System.out.print(miningGrid[y][x].getIcon());
 
                 if (x == dimension - 1)
                     System.out.println();
             }
 
         System.out.println("\n=============================================");
-        System.out.println("Position \t\t\t: ( " + miner.getX() + " , " + miner.getY() + " )");
+        System.out.println("Position \t\t\t: ( " + (miner.getX() + 1) + " , " + (miner.getY() + 1) + " )");
         System.out.println("Facing Direction \t: " + miner.getDirection());
-        System.out.println("Total Scans \t\t: " + miner.getScans());
+        System.out.print("Total Scans \t\t: " + miner.getScans() + "\t\t[");
+        if (scannedBlockInFront == null)
+            System.out.print("Edge");
+        else if (scannedBlockInFront instanceof Pit)
+            System.out.print("Pit");
+        else if (scannedBlockInFront instanceof Beacon)
+            System.out.print("Beacon");
+        else if (scannedBlockInFront instanceof Gold)
+            System.out.print("Gold");
+        else
+            System.out.print("None");
+        System.out.println("]");
         System.out.println("Total Moves \t\t: " + miner.getMoves());
+    }
+
+    private static Block scanFront(Miner miner, Block[][] miningGrid) {
+        Block toReturn = null;
+        try {
+            switch (miner.getDirection()) {
+                case "right" -> {
+                    toReturn = miningGrid[miner.getY()][miner.getX() + 1];
+                }
+                case "left" -> {
+                    toReturn = miningGrid[miner.getY()][miner.getX() - 1];
+                }
+                case "up" -> {
+                    toReturn = miningGrid[miner.getY() + 1][miner.getX()];
+                }
+                case "down" -> {
+                    toReturn = miningGrid[miner.getY() - 1][miner.getX()];
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            toReturn = null;
+        }
+        return toReturn;
     }
 
     private static boolean canMinerStillPlay(Miner miner, Block[][] miningGrid) {
