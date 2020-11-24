@@ -13,12 +13,13 @@ public class Miner {
     public Miner() {
         this.X = 1;
         this.Y = 1;
+        this.scans = 0;
+        this.moves = 0;
 
         // Default Direction = "Right"
-        direction = "right";
+        this.direction = "right";
     }
 
-    // Will Rotate 90 Degrees
     public void rotate() {
         if (direction.equalsIgnoreCase("up"))
             direction = "right";
@@ -30,15 +31,29 @@ public class Miner {
             direction = "down";
     }
 
-  /*
-    Direction of the Front
+    public String getDirection() {
+        return direction;
+    }
 
-    "up" = up
-    "down" = down
-    "left" = left
-    "right" = right
-  */
+    public int getScans() {
+        return scans;
+    }
+
+    public int getMoves() {
+        return moves;
+    }
+
+    public int getX() {
+        return X;
+    }
+
+    public int getY() {
+        return Y;
+    }
+
     private String direction;
     private int X;
     private int Y;
+    private int scans;
+    private int moves;
 }
