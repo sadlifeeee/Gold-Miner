@@ -81,30 +81,31 @@ public class Main {
     private static void printCurrentGameState(Miner miner, Block[][] miningGrid, int dimension) {
         System.out.println("Mining Grid : \n");
 
-        for (int i = 0; i < dimension; i++)
-            for (int j = 0; j < dimension; j++) {
+        for (int y = 0; y < dimension; y++)
+            for (int x = 0; x < dimension; x++) {
                 //  The icon of the Miner has higher precedence than the tiles of the mining grid
-                if (i + 1 == miner.getX() && j + 1 == miner.getY()) {
+                if (x + 1 == miner.getX() && y + 1 == miner.getY()) {
                     System.out.print("M");
                 } else {
-                    if (miningGrid[i][j] instanceof Pit)
+                    if (miningGrid[y][x] instanceof Pit)
                         System.out.print("P");
-                    else if (miningGrid[i][j] instanceof Beacon)
+                    else if (miningGrid[y][x] instanceof Beacon)
                         System.out.print("B");
-                    else if (miningGrid[i][j] instanceof Gold)
+                    else if (miningGrid[y][x] instanceof Gold)
                         System.out.print("G");
                     else
                         System.out.print("-");
                 }
 
-                if (j == dimension - 1)
+                if (x == dimension - 1)
                     System.out.println();
             }
 
-        System.out.println("\n\n=============================================");
+        System.out.println("\n=============================================");
+        System.out.println("Position \t\t\t: ( " + miner.getX() + " , " + miner.getY() + " )");
         System.out.println("Facing Direction \t: " + miner.getDirection());
-        System.out.println("Total Scans \t: " + miner.getScans());
-        System.out.println("Total Moves \t: " + miner.getMoves());
+        System.out.println("Total Scans \t\t: " + miner.getScans());
+        System.out.println("Total Moves \t\t: " + miner.getMoves());
     }
 
     private static boolean canMinerStillPlay(Miner miner, Block[][] miningGrid) {
