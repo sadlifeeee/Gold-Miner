@@ -9,6 +9,7 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         Block[][] miningGrid;
         int isIntelligent = -1;
+        int isSimultaneousPreview = -1;
         int dimension;
 
         try {
@@ -39,31 +40,36 @@ public class Main {
                     isIntelligent = 1;
                 else if (temp.equalsIgnoreCase("N") || temp.equalsIgnoreCase("No"))
                     isIntelligent = 0;
-            } while (isIntelligent != -1);
+            } while (isIntelligent == -1);
 
-            //  Create Miner
-            Miner miner = new Miner();
+            do {
+                System.out.println("Perform in simultaneous succession ? [Y/N] : ");
+                String temp = kb.nextLine();
+                if (temp.equalsIgnoreCase("Y") || temp.equalsIgnoreCase("Yes"))
+                    isSimultaneousPreview = 1;
+                else if (temp.equalsIgnoreCase("N") || temp.equalsIgnoreCase("No"))
+                    isSimultaneousPreview = 0;
+            } while (isSimultaneousPreview == -1);
 
             if (isIntelligent == 1)
-                performIntelligentSearch(miner, miningGrid, dimension);
+                performIntelligentSearch(new Miner(), isSimultaneousPreview, miningGrid, dimension);
             else
-                performIntelligentSearch(miner, miningGrid, dimension);
+                performRandomSearch(new Miner(), isSimultaneousPreview, miningGrid, dimension);
         } catch (InputMismatchException e) {
-            System.out.println("ERROR || Non-Integer entered!");
+            System.out.println("ERROR || Invalid Data type inserted!");
         }
 
         kb.close();
     }
 
-    private static void performRandomSearch(Miner miner, Block[][] miningGrid, int dimension) {
+    private static void performRandomSearch(Miner miner, int isSimultaneousPreview, Block[][] miningGrid, int dimension) {
         //  TODO : Perform this in a seperate branch
     }
 
-    private static void performIntelligentSearch(Miner miner, Block[][] miningGrid, int dimension) {
-        printCurrentGameState(miner, miningGrid, dimension);
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+    private static void performIntelligentSearch(Miner miner, int isSimultaneousPreview, Block[][] miningGrid, int dimension) {
+        while (canMinerStillPlay(miner, miningGrid)) {
+            printCurrentGameState(miner, miningGrid, dimension);
+        }
     }
 
     private static void printCurrentGameState(Miner miner, Block[][] miningGrid, int dimension) {
