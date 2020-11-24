@@ -55,6 +55,7 @@ public class Main {
                 performIntelligentSearch(new Miner(), isSimultaneousPreview, miningGrid, dimension);
             else
                 performRandomSearch(new Miner(), isSimultaneousPreview, miningGrid, dimension);
+
         } catch (InputMismatchException e) {
             System.out.println("ERROR || Invalid Data type inserted!");
         }
