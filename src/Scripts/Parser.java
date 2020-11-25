@@ -11,11 +11,13 @@ public class Parser {
                 switch (rows[i].charAt(j)) {
                     case '-' -> temp[i][j] = new Block(i + 1, j + 1);
                     case 'P' -> temp[i][j] = new Pit(i + 1, j + 1);
+                    case 'p' -> temp[i][j] = new Pit(i + 1, j + 1);
                     case 'B' -> temp[i][j] = new Beacon(i + 1, j + 1);
+                    case 'b' -> temp[i][j] = new Beacon(i + 1, j + 1);
                     case 'G' -> temp[i][j] = new Gold(i + 1, j + 1);
+                    case 'g' -> temp[i][j] = new Gold(i + 1, j + 1);
                 }
 
         return temp;
     }
-
 }

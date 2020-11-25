@@ -53,6 +53,8 @@ public class Main {
                     isSimultaneousPreview = 0;
             } while (isSimultaneousPreview == -1);
 
+            printCurrentGameState(new Miner(), miningGrid, dimension, null);
+
             if (isIntelligent == 1)
                 performIntelligentSearch(new Miner(), isSimultaneousPreview, miningGrid, dimension);
             else
@@ -69,45 +71,47 @@ public class Main {
         //  TODO : Perform this in a seperate branch
     }
 
-    // Current rationale: DFS + Backtracking BUT break when see beacon - then turn to A*
+    // Current rationale: Graph-DFS BUT break when see beacon - then turn to A*
+    // in Graph-DFS, make sure to scan the surroundings and have a priority for specific blocks gold > beacon > none > pit/edge
     private static void performIntelligentSearch(Miner miner, int isSimultaneousPreview, Block[][] miningGrid, int dimension) {
         ArrayList<Block> visitedNodes = new ArrayList<Block>();
         Stack nodePath = new Stack();
         Block scannedBlockInFront;
-        //boolean hasDiscoveredABeacon = false;
+        //boolean hasDiscoveredABeacon = false; // TODO this boolean state only is used once!!!
+        //boolean hasMadeAFullSpin = false; // TODO this boolean state only is used once!!!
 
         while (canMinerStillPlay(miner, miningGrid)) {
             scannedBlockInFront = scanFront(miner, miningGrid);
 
             // TODO be careful the miner scans their nodePath OR just prevent them from doing so
-            if (scannedBlockInFront == null || visitedNodes.contains(scannedBlockInFront)) {
+            if (scannedBlockInFront == null ||
+                    //visitedNodes.contains(scannedBlockInFront) ||
+                    scannedBlockInFront instanceof Pit) {
                 miner.rotate();
             } else {
-                //  Basic function for winning condition
-                if (scannedBlockInFront instanceof Gold) {
-                    miner.moveForwardOneBlock();
-                }
-
                 miner.moveForwardOneBlock();
+
                 //  TODO debug AIOOBE issue
-                visitedNodes.add(miningGrid[miner.getY()][miner.getX()]);
-                nodePath.push(miningGrid[miner.getY()][miner.getX()]);
+//                visitedNodes.add(miningGrid[miner.getY()][miner.getX()]);
+//                nodePath.push(miningGrid[miner.getY()][miner.getX()]);
             }
 
+            //  TODO Configure the step-by-step preview OR rapid preview
             printCurrentGameState(miner, miningGrid, dimension, scannedBlockInFront);
         }
 
-        if (miningGrid[miner.getY()][miner.getX()] instanceof Gold)
-            System.out.println("Win!");
-        else
-            System.out.println("Miner is dead! Game Over!");
+        miner.printGameConclusion(miningGrid);
     }
+
 
     private static void printCurrentGameState(Miner miner, Block[][] miningGrid, int dimension, Block scannedBlockInFront) {
         System.out.println("\n\nMining Grid : \n");
 
         for (int y = 0; y < dimension; y++)
             for (int x = 0; x < dimension; x++) {
+                if (x == 0)
+                    System.out.print("\t");
+
                 //  The icon of the Miner has higher precedence than the tiles of the mining grid
                 if (x == miner.getX() && y == miner.getY())
                     System.out.print("M");
@@ -121,7 +125,7 @@ public class Main {
         System.out.println("\n=============================================");
         System.out.println("Position \t\t\t: ( " + (miner.getX() + 1) + " , " + (miner.getY() + 1) + " )");
         System.out.println("Facing Direction \t: " + miner.getDirection());
-        System.out.print("Total Scans \t\t: " + miner.getScans() + "\t\t[");
+        System.out.print("Total Scans \t\t: " + miner.getScans() + "\t\t[Latest Scan: ");
         if (scannedBlockInFront == null)
             System.out.print("Edge");
         else if (scannedBlockInFront instanceof Pit)
@@ -133,6 +137,7 @@ public class Main {
         else
             System.out.print("None");
         System.out.println("]");
+        System.out.println("Total Rotations \t: " + miner.getRotations());
         System.out.println("Total Moves \t\t: " + miner.getMoves());
     }
 
@@ -147,15 +152,16 @@ public class Main {
                     toReturn = miningGrid[miner.getY()][miner.getX() - 1];
                 }
                 case "up" -> {
-                    toReturn = miningGrid[miner.getY() + 1][miner.getX()];
-                }
-                case "down" -> {
                     toReturn = miningGrid[miner.getY() - 1][miner.getX()];
                 }
+                case "down" -> {
+                    toReturn = miningGrid[miner.getY() + 1][miner.getX()];
+                }
             }
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (Exception e) {
             toReturn = null;
         }
+        miner.incrementScans();
         return toReturn;
     }
 
