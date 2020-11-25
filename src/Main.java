@@ -1,6 +1,4 @@
 import Scripts.*;
-import com.sun.source.tree.BreakTree;
-
 import java.util.*;
 
 //  TODO Beacon's functionality - I think BFS
@@ -68,7 +66,7 @@ public class Main {
     }
 
     private static void performRandomSearch(Miner miner, int isSimultaneousPreview, Block[][] miningGrid, int dimension) {
-        //  TODO : Perform this in a seperate branch
+        //  TODO : Perform this in a separate branch
     }
 
     // Current rationale: Graph-DFS BUT break when see beacon - then turn to A*
@@ -145,18 +143,10 @@ public class Main {
         Block toReturn = null;
         try {
             switch (miner.getDirection()) {
-                case "right" -> {
-                    toReturn = miningGrid[miner.getY()][miner.getX() + 1];
-                }
-                case "left" -> {
-                    toReturn = miningGrid[miner.getY()][miner.getX() - 1];
-                }
-                case "up" -> {
-                    toReturn = miningGrid[miner.getY() - 1][miner.getX()];
-                }
-                case "down" -> {
-                    toReturn = miningGrid[miner.getY() + 1][miner.getX()];
-                }
+                case "right" -> toReturn = miningGrid[miner.getY()][miner.getX() + 1];
+                case "left" ->  toReturn = miningGrid[miner.getY()][miner.getX() - 1];
+                case "up" ->    toReturn = miningGrid[miner.getY() - 1][miner.getX()];
+                case "down" ->  toReturn = miningGrid[miner.getY() + 1][miner.getX()];
             }
         } catch (Exception e) {
             toReturn = null;
